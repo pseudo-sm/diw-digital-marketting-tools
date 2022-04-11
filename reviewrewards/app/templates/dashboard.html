@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <input type="email" id="email" class="form-control">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <button id="request-verification"  class="btn btn-primary w-100">Request Verification</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-3">
+
+            <div class="card m-5" style="width: 18rem;">
+        <div class="card-header">
+            Your Verified Email Accounts
+        </div>
+      <ul class="list-group list-group-flush">
+          {% for email_account in email_accounts %}
+            <li class="list-group-item">{{email_account.email_id}}</li>
+          {% endfor %}
+      </ul>
+    </div>
+
+            </div>
+        <div class="col-9">
+            <div class="card m-5">
+          <div class="card-header">
+            Featured
+          </div>
+
+                {% for business in businesses %}
+                  <div class="card-body mt-1">
+                    <h5 class="card-title">{{business.name}}</h5>
+                    <button data-business="{{business.id}}" class="btn btn-primary rate">Rate</button>
+                  </div>
+                <hr>
+                {% endfor %}
+        </div>
+            </div>
+
+    </div>
+    <div class="modal" id="otp-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-3">
+          <div class="row m-2">
+              <label for="otp">OTP</label>
+              <input type="number" class="form-control"  id="otp">
+          </div>
+          <div class="row m-2">
+               <label for="otp">First Name</label>
+                <input type="text" class="form-control" id="first_name"  placeholder="first name as per gmail account">
+          </div>
+          <div class="row m-2">
+               <label for="otp">Last Name</label>
+                <input type="text" class="form-control"  id="last_name" placeholder="last name as per gmail account">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="otp-submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <div class="modal" id="rate-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-3">
+          <div class="row m-2">
+              <label for="account">Choose Account</label>
+              <input type="hidden" id="target_business_id">
+              <select class="form-control"  id="account">
+
+              </select>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="rate-submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    $("#request-verification").click(function(){
+        email = $("#email").val();
+        $.ajax({
+        url: "{% url 'request_verification' %}",
+        type: 'GET',
+        data : {
+            'email' : email
+        },
+        dataType: 'json', // added data type
+        success: function(res) {
+            $('#otp-modal').modal('toggle');
+            console.log(res);
+        }
+    });
+    })
+
+    $("#otp-submit").click(function(){
+        otp = $("#otp").val();
+        first_name = $("#first_name").val();
+        last_name = $("#last_name").val();
+        email = $("#email").val();
+        console.log(otp,first_name,last_name);
+        $.ajax({
+        url: "{% url 'otp_action' %}",
+        type: 'GET',
+        data : {
+            'email' : email,
+            'otp' : otp,
+            'first_name' : first_name,
+            'last_name' : last_name
+        },
+        dataType: 'json', // added data type
+        success: function(res) {
+        if(res) {
+            alert('Verified Successfully');
+            $('#otp-modal').modal('toggle');
+            location.reload();
+        }
+        else {
+            alert('Invalid OTP');
+        }
+
+        }
+    });
+    })
+
+    $('.rate').click(function(){
+        $('#rate-modal').modal('toggle');
+        business_id = $(this).attr('data-business');
+        $('#target_business_id').val(business_id);
+        $.ajax({
+        url: "{% url 'get_available_email' %}",
+        type: 'GET',
+        data : {
+            'business_id' : business_id
+        },
+        dataType: 'json', // added data type
+        success: function(res) {
+        $('#account').empty();
+        console.log(res);
+        if(res.emails.length>0){
+            res.emails.map((item)=>{
+                $('#account').append('<option value="'+item.id+'">"'+item.email_id+'"</option>');
+            });
+        }
+        else {
+            alert('You have used all your email accounts for this business. Add new email accounts to add more reviews to this business.');
+        }
+
+    }
+    });
+});
+
+    $('#rate-submit').click(function(){
+        business_id = $('#target_business_id').val();
+        email_id = $('#account :selected').val();
+        $.ajax({
+        url: "{% url 'submit_rate_request' %}",
+        type: 'GET',
+        data : {
+            'business_id' : business_id,
+            'email_id' : email_id
+        },
+        dataType: 'json', // added data type
+        success: function(res) {
+        alert('Your request will be verified in 24 Hours.');
+        $('#rate-modal').modal('toggle');
+    }
+});
+    });
+
+</script>
+</body>
+</html>

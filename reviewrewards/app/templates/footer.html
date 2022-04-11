@@ -1,0 +1,45 @@
+<div class="wrapper">
+<div class="container">
+  <div class="row justify-content-center">
+  <div class="col-md-5">
+   <div class="card">
+     <h2 class="card-title text-center">Register <a href="http://opensnippets.com">open snippets</a></h2>
+      <div class="card-body py-md-4">
+       <form _lpchecked="1" action="{% url 'login_action' %}" method="post">
+           {% csrf_token %}
+
+            <div class="form-group">
+                <input type="email" class="form-control" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="password" placeholder="Password">
+            </div>
+
+   <div class="d-flex flex-row align-items-center justify-content-between">
+      <a href="{% url 'register' %}">Register</a>
+                                <button class="btn btn-primary" type="submit">Login</button>
+          </div>
+       </form>
+     </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Footer -->
+<div class="text-center text-lg-start bg-light text-muted foot">
+  <!-- Section: Social media -->
+
+
+  <!-- Section: Links  -->
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2022 Copyright:
+    <a class="text-reset fw-bold" href="https://www.digitalitweb.com/">www.digitalitweb.com</a>
+  </div>
+  <!-- Copyright -->
+</div>
+<!-- Footer -->
+
+</div>
