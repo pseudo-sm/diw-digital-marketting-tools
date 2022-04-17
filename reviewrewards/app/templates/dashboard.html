@@ -46,7 +46,8 @@
                 {% for business in businesses %}
                   <div class="card-body mt-1">
                     <h5 class="card-title">{{business.name}}</h5>
-                    <button data-business="{{business.id}}" class="btn btn-primary rate">Rate</button>
+                    <button data-business="{{business.id}}" class="btn btn-primary rate">Request Rate Verification</button>
+                    <a href="{{business.url}}" target="_blank" class="btn btn-primary">Link to Rate</a>
                   </div>
                 <hr>
                 {% endfor %}
@@ -206,5 +207,7 @@
     });
 
 </script>
+<a href="{% url 'logout' %}" style="position:absolute;top:0;right:0;margin:0.5rem"> Logout <i class="fa-solid fa-right-from-bracket" style="font-size:0.rem"></i></a>
+<script src="https://kit.fontawesome.com/67569047ce.js" crossorigin="anonymous"></script>
 </body>
 </html>

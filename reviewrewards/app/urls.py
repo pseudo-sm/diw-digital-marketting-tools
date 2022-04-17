@@ -30,4 +30,5 @@ urlpatterns = [
     path('job',views.job,name='job'),
     path('report',views.report,name='report'),
     path('mark-as-paid',views.mark_as_paid,name='mark_as_paid'),
+    path('logout',views.logout,name='logout'),
 ]

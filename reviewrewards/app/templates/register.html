@@ -40,7 +40,9 @@
             box-shadow: none;
 
         }
-
+        .wrapper{
+            height: 100vh;
+        }
         .btn{
           padding: 0.6rem 1.2rem;
           background: #da5767;
@@ -54,14 +56,21 @@
           transition: .3s;
 
         }
+
+        .foot {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
     </style>
 </head>
 <body>
+<div class="wrapper">
 <div class="container">
   <div class="row justify-content-center">
   <div class="col-md-5">
    <div class="card">
-     <h2 class="card-title text-center">Register <a href="http://opensnippets.com">open snippets</a></h2>
+     <h2 class="card-title text-center">Register </h2>
       <div class="card-body py-md-4">
        <form _lpchecked="1" action="{% url 'register_action' %}" method="post">
            {% csrf_token %}
@@ -90,5 +99,6 @@
 </div>
 </div>
 {% include 'footer.html' %}
+</div>
 </body>
 </html>

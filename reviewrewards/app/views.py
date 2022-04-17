@@ -190,3 +190,7 @@ def mark_as_paid(request):
     ids = json.loads(ids)
     RateRequest.objects.filter(id__in=ids).update(paid=True)
     return JsonResponse(True,safe=False)
+
+def logout(request):
+    auth.logout(request)
+    return redirect("index")

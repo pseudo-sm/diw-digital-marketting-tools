@@ -8,7 +8,7 @@ class Business(models.Model):
     name = models.CharField(max_length=255)
     data_id = models.CharField(max_length=255,null=True,blank=True)
     location_rule = models.CharField(max_length=255)
-
+    url = models.CharField(max_length=1000)
     def __str__(self):
         return self.name
 
