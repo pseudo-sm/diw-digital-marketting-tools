@@ -37,7 +37,7 @@ def register(request):
 
 def dashboard(request):
     regUser = get_user(request.user.username)
-    email_accounts = EmailAccounts.objects.filter(user=regUser)
+    email_accounts = EmailAccounts.objects.filter(user=regUser,status=True)
     business = Business.objects.all()
     return render(request,"dashboard.html",{"email_accounts":email_accounts,"businesses":business})
 
@@ -53,7 +53,7 @@ def rate(request):
 def get_available_email(request):
     business_id = request.GET.get("business_id")
     regUser = get_user(request.user.username)
-    email_ids = list(EmailAccounts.objects.filter(user=regUser).values_list("id",flat=True))
+    email_ids = list(EmailAccounts.objects.filter(user=regUser,status=True).values_list("id",flat=True))
     business = Business.objects.get(id=business_id)
     rr = RateRequest.objects.filter(email__in=email_ids,business=business)
     unavailable_email_ids = list(rr.values_list("email",flat=True))
@@ -69,7 +69,7 @@ def request_verification(request):
         if len(EmailAccounts.objects.filter(email_id=email,status=True))!=0:
             return JsonResponse(False,safe=False)
         else:
-            EmailAccounts.objects.delete(email_id=email)
+            EmailAccounts.objects.filter(email_id=email).delete()
     regUser = get_user(request.user.username)
     emailAccount = EmailAccounts(email_id=email,otp=otp,user=regUser)
     emailAccount.save()
