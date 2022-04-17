@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from django.conf.urls import (handler400, handler403, handler404, handler500, url)
+from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
+
 
 urlpatterns = [
     path('',views.login,name='index'),
@@ -32,3 +36,11 @@ urlpatterns = [
     path('mark-as-paid',views.mark_as_paid,name='mark_as_paid'),
     path('logout',views.logout,name='logout'),
 ]
+
+
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+handler404 = views.handler404
+handler500 = views.handler500
