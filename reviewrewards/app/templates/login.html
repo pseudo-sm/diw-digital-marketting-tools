@@ -64,6 +64,7 @@
 }
     </style>
 </head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <body>
 
 <div class="wrapper">
@@ -73,7 +74,7 @@
    <div class="card">
      <h2 class="card-title text-center">Register <a href="http://opensnippets.com">open snippets</a></h2>
       <div class="card-body py-md-4">
-       <form _lpchecked="1" action="{% url 'login_action' %}" method="post">
+       <form class="" _lpchecked="1" action="{% url 'login_action' %}" method="post">
            {% csrf_token %}
 
             <div class="form-group">
